@@ -2,7 +2,7 @@
 using CourseProvider.Infrastructure.Data.Contexts;
 using CourseProvider.Infrastructure.Factories;
 using CourseProvider.Infrastructure.Models;
-using Microsoft.AspNetCore.Authorization;
+using HotChocolate.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseProvider.Infrastructure.Services;
