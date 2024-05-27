@@ -2,6 +2,7 @@
 using CourseProvider.Infrastructure.Data.Contexts;
 using CourseProvider.Infrastructure.Factories;
 using CourseProvider.Infrastructure.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace CourseProvider.Infrastructure.Services;
@@ -30,6 +31,7 @@ public class CourseService(IDbContextFactory<DataContext> contextFactory) : ICou
         return CourseFactory.Create(courseEntity);
     }
 
+    [Authorize]
     public async Task<Course> GetCourseByIdAsync(string id)
     {
         await using var context = _contextFactory.CreateDbContext();
@@ -43,6 +45,7 @@ public class CourseService(IDbContextFactory<DataContext> contextFactory) : ICou
             return null!;
     }
 
+    [Authorize]
     public async Task<IEnumerable<Course>> GetCoursesAsync()
     {
         await using var context = _contextFactory.CreateDbContext();
