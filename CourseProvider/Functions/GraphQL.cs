@@ -13,6 +13,11 @@ namespace CourseProvider.Functions
         [Function("GraphQL")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "graphql")] HttpRequest req)
         {
+            if (!req.Headers.TryGetValue("Authorization", out var authHeader))
+            {
+                return new UnauthorizedResult();
+            }
+
             return await _graphQLRequestExecutor.ExecuteAsync(req);
         }
     }

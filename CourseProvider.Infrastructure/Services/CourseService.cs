@@ -31,7 +31,6 @@ public class CourseService(IDbContextFactory<DataContext> contextFactory) : ICou
         return CourseFactory.Create(courseEntity);
     }
 
-    [Authorize]
     public async Task<Course> GetCourseByIdAsync(string id)
     {
         await using var context = _contextFactory.CreateDbContext();
@@ -45,7 +44,6 @@ public class CourseService(IDbContextFactory<DataContext> contextFactory) : ICou
             return null!;
     }
 
-    [Authorize]
     public async Task<IEnumerable<Course>> GetCoursesAsync()
     {
         await using var context = _contextFactory.CreateDbContext();
