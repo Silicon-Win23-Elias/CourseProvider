@@ -42,7 +42,7 @@ namespace CourseProvider.Functions
         {
             claimsPrincipal = null;
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("3e0f2db8-3ce3-4e22-b53a-7a609b4b7048");
+            var key = Encoding.ASCII.GetBytes("3e0f2db8-3ce3-4e22-b53a-7a609b4b7048elias");
 
             try
             {
