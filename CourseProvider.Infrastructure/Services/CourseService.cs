@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using CourseProvider.Infrastructure.Data.Contexts;
+using CourseProvider.Infrastructure.Data.Entities;
 using CourseProvider.Infrastructure.Factories;
 using CourseProvider.Infrastructure.Models;
 using HotChocolate.Authorization;
@@ -57,13 +58,45 @@ public class CourseService(IDbContextFactory<DataContext> contextFactory) : ICou
         var existingCourse = await context.Courses.FirstOrDefaultAsync(x => x.Id == request.Id);
         if (existingCourse == null) return null!;
 
-        var updatedCourseEntity = CourseFactory.Create(request);
-        updatedCourseEntity.Id = existingCourse.Id;
-        context.Entry(existingCourse).CurrentValues.SetValues(updatedCourseEntity);
+        existingCourse.ImageUri = request.ImageUri;
+        existingCourse.ImageHeaderUri = request.ImageHeaderUri;
+        existingCourse.IsBestSeller = request.IsBestSeller;
+        existingCourse.IsDigital = request.IsDigital;
+        existingCourse.Categories = request.Categories;
+        existingCourse.Title = request.Title;
+        existingCourse.Subtitle = request.Subtitle;
+        existingCourse.StarRating = request.StarRating;
+        existingCourse.Reviews = request.Reviews;
+        existingCourse.LikesPercent = request.LikesPercent;
+        existingCourse.Likes = request.Likes;
+        existingCourse.Duration = request.Duration;
+
+        existingCourse.Authors = request.Authors?.Select(a => new AuthorEntity
+        {
+            Name = a.Name
+        }).ToList();
+
+        existingCourse.Prices = request.Prices == null ? null : new PricesEntity
+        {
+            Currency = request.Prices.Currency,
+            Price = request.Prices.Price,
+            Discount = request.Prices.Discount
+        };
+
+        existingCourse.Content = request.Content == null ? null : new ContentEntity
+        {
+            Description = request.Content.Description,
+            Includes = request.Content.Includes,
+            ProgramDetails = request.Content.ProgramDetails?.Select(pd => new ProgramDetailItemEntity
+            {
+                Id = pd.Id,
+                Title = pd.Title,
+                Description = pd.Description
+            }).ToList()
+        };
 
         await context.SaveChangesAsync();
         return CourseFactory.Create(existingCourse);
-
     }
     public async Task<bool> DeleteCourseAsync(string id)
     {
